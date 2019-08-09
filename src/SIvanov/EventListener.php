@@ -27,21 +27,18 @@ class EventListener implements Listener
         $player = $event->getPlayer();
         $block = $event->getBlock();
 
-        if ($block instanceof Chest){
+        if ($block instanceof Chest) {
             $event->setCancelled(true);
             $tile = $player->getLevel()->getTile($block->asVector3());
 
-            if ($tile instanceof \pocketmine\tile\Chest){
-                foreach ($tile->getInventory()->getContents() as $item){
-                    $player->getLevel()->setBlock($block->asVector3(), Block::get(0));
+            foreach ($tile->getInventory()->getContents() as $item) {
+                $player->getLevel()->setBlock($block->asVector3(), Block::get(0));
 
-                    $player->getLevel()->dropItem($block->asVector3(), $item);
+                $player->getLevel()->dropItem($block->asVector3(), $item);
 
-                    $particle = new DestroyBlockParticle($block->asVector3(), BlockFactory::get(Block::CHEST));
-                    $player->getLevel()->addParticle($particle);
-                }
+                $particle = new DestroyBlockParticle($block->asVector3(), BlockFactory::get(Block::CHEST));
+                $player->getLevel()->addParticle($particle);
             }
         }
     }
-
 }
